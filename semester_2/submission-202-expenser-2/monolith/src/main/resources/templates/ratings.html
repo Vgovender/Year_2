@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{/layout.html}">
+
+<head>
+    <script th:src="@{/js/claimexpense.js}" defer></script>
+</head>
+<body>
+<div layout:fragment="contents">
+    <main>
+        <h2 th:text="${data}"></h2>
+        <section th:unless="${#arrays.isEmpty(data)}">
+            <table id="claims">
+                <tr>
+                    <th>Who</th>
+                    <th>Last Updated</th>
+                    <th>Amount</th>
+
+                </tr>
+<!--                <th:block th:each="person : ${Persons}" >-->
+<!--                    <tr>-->
+<!--                        <td th:text="" th:id="'claim_who_' + ${iterStat.count}"></td>-->
+<!--                        <td th:text="" th:id="'last_update_' + ${iterStat.count}"></td>-->
+<!--                        <td th:text="" th:id="'claim_amount_' + ${iterStat.count}"></td>-->
+<!--                    </tr>-->
+
+<!--                </th:block>-->
+
+
+            </table>
+        </section>
+    </main>
+
+</div>
+
+</body>
+
+</html>

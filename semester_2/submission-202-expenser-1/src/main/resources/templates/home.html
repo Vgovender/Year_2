@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layout.html}">
+
+<head>
+    <style>
+        table {
+            width: 50%;
+            letter-spacing: 1px;
+            font-size: 1rem;
+        }
+
+        td,
+        th {
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="contents">
+        <h2>My expenses</h2>
+        <a href="/newexpense" id="add_expense">Add a new expense</a>
+
+        <div>
+            <p id="no_expenses" th:if="${#arrays.isEmpty(expenses)}">You don't have any expenses!</p>
+            <table id="expenses" th:unless="${#arrays.isEmpty(expenses)}">
+                <tr>
+                    <th>When</th>
+                    <th>What</th>
+                    <td></td>
+                    <th>How Much</th>
+                </tr>
+                <th:block th:each="expense : ${expenses}">
+                    <tr>
+                        <td th:id="${#ids.seq('date_')}" th:text="${expense.getDate()}">When was this expense made?</td>
+                        <td><a th:id="${#ids.seq('claim_expense_')}" href="claimexpense.html"
+                            th:href="@{'/claimexpense?expenseId=' + ${expense.getId()}}"
+                            th:text="${expense.description}">What was the expense?</a></td>
+                        <td></td>
+                        <td th:id="${#ids.seq('amount_')}" th:text="${#numbers.formatDecimal(expense.getAmount(),0,2,'POINT')}">Expense amount</td>
+                    </tr>
+                </th:block>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td id="expenses_total" 
+                    th:text="${#numbers.formatDecimal(expenseTotal,0,2,'POINT')}"
+                    style="font-weight: 900;">Total Expenses</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>People that owe me</h2>
+        <div>
+            <p id="nobody_owes" th:if="${#arrays.isEmpty(theyOweMe)}">Nobody owes you any money!</p>
+            <table id="they_owe_me" th:unless="${#arrays.isEmpty(theyOweMe)}">
+                <tr>
+                    <th>Who</th>
+                    <th>What</th>
+                    <th>Due</th>
+                    <th>How Much</th>
+                </tr>
+                <th:block th:each="claim: ${theyOweMe}">
+                    <tr>
+                        <td th:text="${claim.getClaimedFrom().getName()}">Person who owes me</td>
+                        <td th:text="${claim.getDescription()}">What's the claim about?</td>
+                        <td th:text="${claim.getDueDate()}">When am I getting paid back?</td>
+                        <td th:text="${#numbers.formatDecimal(claim.getAmount(),0,2,'POINT')}">How much was it again?</td>
+                    </tr>
+                </th:block>
+                <tr> 
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td id="they_owe_me_total" 
+                    th:text="${#numbers.formatDecimal(theyOweMeTotal,0,2,'POINT')}"
+                    style="font-weight: 900;">Total I am owed</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>People I owe</h2>
+        <div>
+            <p id="owe_nobody" th:if="${#arrays.isEmpty(iOweThem)}">You don't owe anyone!</p>
+            <table id="i_owe_them" th:unless="${#arrays.isEmpty(iOweThem)}">
+                <tr>
+                    <th>Who</th>
+                    <th>What</th>
+                    <th>Due</th>
+                    <th>How Much</th>
+                </tr>
+                <th:block th:each="claim: ${iOweThem}">
+                    <tr>
+                        <td th:text="${claim.getClaimedBy().getName()}">Person I owe</td>
+                        <td><a th:id="${#ids.seq('settle_')}" href="settleclaim.html" 
+                            th:href="@{'/settleclaim?claimId=' + ${claim.getId()}}" 
+                            th:text="${claim.getDescription()}">I owe them for?</a></td>
+                        <td th:text="${claim.getDueDate()}">When must I pay it back?</td>
+                        <td th:text="${#numbers.formatDecimal(claim.getAmount(),0,2,'POINT')}">How much was it again?</td>
+                    </tr>
+                </th:block >
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td id="i_owe_them_total" 
+                    th:text="${#numbers.formatDecimal(iOweThemTotal,0,2,'POINT')}"
+                    style="font-weight: 900;">Total I owe</td>
+                </tr>
+            </table>
+        </div>
+        <p id="nett_expenses" th:unless="${#arrays.isEmpty(iOweThem) 
+            && #arrays.isEmpty(theyOweMe) && #arrays.isEmpty(expenses)}" 
+        th:text="${#numbers.formatDecimal(nettExpenses,0,2,'POINT')}"
+        style="font-weight: 900; font-size: 48px;">Nett expenses</p>
+    </div>
+</body>
+
+</html>

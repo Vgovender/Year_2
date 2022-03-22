@@ -1,0 +1,18 @@
+!!za.co.wethinkcode.server.configs.GameState
+robotList:
+-   shields: 8
+    RobotName: f
+    position:
+    - 62
+    - 109
+    shots: 1
+    direction: NORTH
+    status: NORMAL
+-   shields: 10
+    RobotName: g
+    position:
+    - -92
+    - 118
+    shots: 10
+    direction: NORTH
+    status: NORMAL

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{/layout.html}">
+<head></head>
+<body>
+<div layout:fragment="contents">
+        <authentication mode="Forms">
+        <form id="form" action="/expenses" method="post">
+                <h1>Capture an expense</h1>
+                <div>
+                        <label for="description">What did you spend money on?</label>
+                        <input id="description" name="description" type="text" required>
+                </div>
+                <div>
+                        <label for="amount">How much did you spend?</label>
+                        <input id="amount" name="amount" type="text" required>
+                </div>
+                <div>
+                        <label for="date">When did you spend the money?</label>
+                        <input type="text" id="date" name="date" value="" min="01/01/1990" placeholder="dd/mm/yyyy" required>
+                </div>
+                <div>
+<!--                        <a href="/newexpense">Cancel</a>-->
+<!--                        <button id="submit" type="submit" formaction="/expenses" formmethod="post" formenctype="text/plain" >Submit</button>-->
+                        <button id="submit" type="submit" >Submit</button>
+
+                </div>
+
+        </form>
+        </authentication>
+</div>
+</body>
+
+</html>

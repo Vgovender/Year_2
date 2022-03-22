@@ -1,0 +1,3 @@
+#! /bin/bash
+mvn compiler:compile -f `pwd`
+mvn exec:java -Dexec.mainClass="za.co.wethinkcode.server.MultiServer"

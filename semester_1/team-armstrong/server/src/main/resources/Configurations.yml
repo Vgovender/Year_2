@@ -1,0 +1,10 @@
+---
+visibility: 10
+reloadWeapon: 3
+repairShields: 3
+mine: 3
+maxShieldStrength: 5
+height: 40
+width: 40
+shield: 5
+shots: 5

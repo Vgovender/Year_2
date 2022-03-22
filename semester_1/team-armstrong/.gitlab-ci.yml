@@ -1,0 +1,84 @@
+default:
+  image: maven:latest
+
+stages:
+  - clean
+  - format
+  - upgrade
+  - test
+  - build  
+  - docker        # List of stages for jobs, and their order of execution
+  # - test
+
+clean:
+  stage: clean
+  image: cirrusci/flutter:stable
+  script:
+    - cd app
+    - flutter pub get
+    - rm -rf pubspec.lock
+    - flutter clean
+
+format:
+  stage: format
+  image: cirrusci/flutter:stable
+  needs: [ clean ]
+  script:
+    - cd app
+    - dart format .
+
+upgrade:
+  stage: upgrade
+  image: cirrusci/flutter:stable
+  needs: [ clean ]
+  script:
+    - cd app
+    - flutter pub upgrade
+
+building-server:
+  stage: build
+  script:
+    - cd server
+    - mvn initialize
+    - mvn clean
+    - mvn verify 
+    - mvn compile
+
+packaging-server:
+  stage: build
+  needs: [ building-server ]
+  script:
+    - cd server
+    - mvn initialize
+    - mvn package 
+
+
+docker-build:
+  image: docker:latest
+  stage: docker
+  needs: [ packaging-server ]
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+  script:
+    - cd server
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
+
+
+testing-run:
+  stage: test
+  script:
+    - cd server
+    - mvn initialize
+    - mvn test
+
+
+
+
+  
+
+
+

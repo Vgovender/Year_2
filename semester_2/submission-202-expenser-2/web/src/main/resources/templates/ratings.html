@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{/layout.html}">
+
+<head>
+    <script th:src="@{/js/ratings.js}" defer></script>
+</head>
+<body>
+<div layout:fragment="contents">
+    <main>
+        <h2 th:text="${title}" id="title"></h2>
+        <section th:unless="${#arrays.isEmpty(persons)}">
+            <table id="claims">
+                <tr>
+                    <th>Who</th>
+                    <th>Last Updated</th>
+                    <th>Amount</th>
+
+                </tr>
+                <th:block th:each="newPerson : ${persons}" >
+                    <tr>
+                        <td th:text="${newPerson.who}"  th:id="${#ids.seq('claim_who_')}"></td>
+                        <td th:text="${newPerson.when}" th:id="${#ids.seq('last_update_')}"></td>
+                        <td th:text="${newPerson.amount}" th:id="${#ids.seq('amount_')}"></td>
+                    </tr>
+
+                </th:block>
+
+
+            </table>
+        </section>
+    </main>
+
+</div>
+
+</body>
+
+</html>

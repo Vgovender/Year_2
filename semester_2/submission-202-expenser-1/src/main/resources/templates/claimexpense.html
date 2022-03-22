@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.w3.org/1999/xhtml"
+        layout:decorate="~{/layout.html}">
+<head>
+    <script th:src="@{/js/claimexpense.js}" defer></script>
+</head>
+<body>
+<div layout:fragment="contents">
+    <h2><b>Submit a claim for the following expense</b></h2>
+    <table>
+        <tr>
+            <td id="expense_date" th:text="${expense.date}"></td>
+            <td id="expense_description" th:text="${expense.description}"></td>
+            <td th:text="${#numbers.formatDecimal(expense.amount,0,2,'POINT')}" id="expense_amount"></td>
+        </tr>
+    </table>
+    <div id = "claims_section" th:unless="${#arrays.isEmpty(Claims)}">
+        <h2><b>Previous Claims for this expense</b></h2>
+        <table id="claims">
+            <tr>
+                <th>Who</th>
+                <th>Due</th>
+                <th>Settled</th>
+                <th>How Much</th>
+            </tr>
+                <th:block th:each="claim : ${Claims}" >
+                <tr>
+                    <td th:text="${claim.getClaimedFrom().getName()}" th:id="${#ids.seq('claim_who_')}" class="money"></td>
+                    <td th:text="${claim.getDueDate()}" th:id="${#ids.seq('claim_date_')}"></td>
+                    <td th:text="${claim.isSettled()} ? 'Yes':'No'" th:id="${#ids.seq('claim_settled_')}"></td>
+                    <td th:text="${#numbers.formatDecimal(claim.getAmount(),0,2,'POINT')}" th:id="${#ids.seq('claim_amount_')}"></td>
+                </tr>
+
+            </th:block>
+
+
+        </table>
+
+        <table>
+            <tr>
+                <td colspan="3"></td>
+                <td th:text="${#numbers.formatDecimal(claimTotals,0,2,'POINT')}" id="total_claims"></td>
+            </tr>
+            <tr>
+                <td colspan="3"><lable>Amount that has not been claimed </lable></td>
+
+                <td th:text="${#numbers.formatDecimal(unclaimedTotals,0,2,'POINT')}" id="unclaimed_amount"></td>
+            </tr>
+        </table>
+
+    </div>
+    <form id="claim_form" name="claim_form" action="/api/claims" method="POST" enctype="json">
+        <div>
+            <label>The person Paying you</label>
+            <input type="email" id="email" value="" name="email" required>
+        </div>
+        <div>
+            <label>The amount they should pay you</label>
+            <input type="number" value="" id="claim_amount" name="claim_amount" min="1" required>
+        </div>
+        <div>
+            <label>By when must this be settled?</label>
+            <input type="text" id="due_date" name="due_date" placeholder="dd-mm-yyyy" min="01-06-1990" required>
+        </div>
+
+        <div>
+            <input id = "add_claim" type="submit"  value="Add Claim" name="add_claim">
+        </div>
+    </form>
+</div>
+
+</body>
+
+</html>

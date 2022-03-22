@@ -1,0 +1,13 @@
+FROM ubuntu:20.04                                                          
+
+RUN apt-get update
+RUN apt-get install -y openjdk-11-jre curl                                                  
+
+ADD libs/output/robot-world-server-1.0.0.jar /srv/
+
+WORKDIR /srv                                                                                
+EXPOSE 7000
+
+CMD ["java", "-jar", "robot-world-server-1.0.0.jar"]
+
+##
